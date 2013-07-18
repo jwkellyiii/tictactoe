@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TicTacToe</title>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css" />
+        <link rel="stylesheet/less" type="text/css" href="css/tictactoe.less" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="span4">
+                    <div id="statistics">
+                        <h4>Statistics: <a href="#" class="clear_stats">[clear]</a></h4>
+                        <ul class="clearfix">
+                            <li>X wins:: <span id="X_wins_count">0</span></li>
+                            <li>O wins:: <span id="O_wins_count">0</span></li>
+                            <li>Draws:: <span id="draw_count">0</span></li>
+                        </ul>
+                    </div>
+
+                    <a class="btn btn-small btn-primary start disabled" href="#">
+                        <i class="icon-repeat icon-white"></i>
+                        play again
+                    </a>
+                </div>
+                <div class="span8">
+
+                    <article id="tictactoe">
+                        <!-- the board goes here -->
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <script src="scripts/vendor/less/less-1.4.1.min.js"></script>
+
+        <!-- data-main attribute tells require.js to load scripts/main.js after require.js loads. -->
+        <script data-main="scripts/main" src="scripts/require.js"></script>
+
+        <!--
+        <script src="scripts/vendor/jquery-1.9.1.min.js"></script>
+        <script src="scripts/vendor/modernizr/modernizr-2.6.2.min.js"></script>
+        <script src="scripts/vendor/underscore/underscore-min.js"></script>
+        <script src="scripts/vendor/backbone/backbone-min.js"></script>
+        <script src="scripts/tictactoe.js"></script>
+        <script>
+            $(document).ready(function(){
+                var game = TicTacToe.init({});
+                new TicTacToeView({model: game});
+            });
+        </script>
+        -->
+    </body>
+</html>
