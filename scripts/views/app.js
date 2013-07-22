@@ -11,20 +11,16 @@ define([
             this.el = $('#tictactoe');
             this.messageEl = this.el.find('.message');
             this.model
-                .bind('game:move', this.renderMark)
                 .bind('game:draw', this.renderDraw)
                 .bind('game:winner', this.renderWinner);
 
-            $('.start').bind('click', this.start);
-            $('.clear_stats').bind('click', this.clearStatistics);
+            $('.clear_stats').one('click', this.clearStatistics);
 
             if (Modernizr.localstorage) {
                 this.updateStatistics();
             } else {
                 $("#statistics").hide();
             }
-
-            //this.start();
         },
 
         render: function () {
@@ -35,21 +31,23 @@ define([
         // starts game
         start: function() {
             this.clearBoard();
-            $(".start").addClass("disabled");
-            $('.square', $(this.el)).bind('click', this.makeMove);
+            $('.square', $(this.el)).one('click', this.makeMove);
 
             this.model.start();
         },
 
         // places mark on the board
         renderMark: function(index, player) {
+            $('#square_' + index).unbind();
+
             var xo = (player == this.model.board.X) ? 'X' : 'O';
             $('#square_' + index).html('<div class="mark">' + xo + '</div>');
-            $('#square_' + index).unbind();
         },
 
         // clears board
         clearBoard: function() {
+            $(".start").addClass("disabled");
+
             this.el.find('.square').removeClass("winner").html('');
             this.hideMessage();
         },
@@ -59,16 +57,23 @@ define([
             var square = e.currentTarget,
                 self = this,
                 index = $(square).attr('id').split('_')[1];
-            this.renderMark(index, this.model.cur);
-            self.model.move(index);
+
+            // allow players to restart the game after making a move
+            if($(".start").hasClass("disabled")) {
+                $(".start").removeClass("disabled");
+                $('.start').one('click', this.start);
+            }
+
+            // ensure the square has not already been played
+            if($(square).html() == "") {
+                this.renderMark(index, this.model.cur);
+                self.model.move(index);
+            }
         },
 
         // renders draw
         renderDraw: function() {
             this.showMessage('draw!', "alert-block");
-            this.el.find('.square').unbind();
-
-
 
             // use local storage to keep track of draws
             if (Modernizr.localstorage) {
@@ -86,7 +91,6 @@ define([
         renderWinner: function(winner) {
             var xo = (winner == 1) ? 'X' : 'O';
             this.showMessage(xo + ' wins!', "alert-success");
-            this.el.find('.square').unbind();
 
             // use local storage to keep track of wins
             if (Modernizr.localstorage) {
@@ -106,6 +110,7 @@ define([
             //this.messageEl.html(m);
             $("#tictactoe .message").html(m);
             $(".start").removeClass("disabled");
+            $('.start').one('click', this.start);
         },
 
         hideMessage: function() {
