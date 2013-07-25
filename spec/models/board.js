@@ -72,7 +72,7 @@ define(['tictactoe'], function(TicTacToe) {
             it('validates if maximum moves are not played, the board is not full', function() {
                 expect(board_full).toEqual(false);
 
-                game.board.moves = Math.floor((Math.random()*8)+1)
+                game.board.moves = Math.floor((Math.random()*8)+1);
                 board_full = game.board.isFull();
 
                 expect(board_full).toEqual(false);
@@ -85,6 +85,27 @@ define(['tictactoe'], function(TicTacToe) {
                 board_full = game.board.isFull();
 
                 expect(board_full).toEqual(true);
+            });
+        });
+
+        describe('get a squares value', function() {
+            beforeEach(function() {
+                game.start();
+            });
+
+            it('should be an empty square on a new board', function() {
+                expect(game.board.getSquare(0)).toEqual(board.EMPTY);
+            });
+
+            it('should be an X/O after a player moves', function() {
+                var square = Math.floor((Math.random()*9)+1);
+                var player = game.cur;
+
+                expect(game.board.getSquare(square)).toEqual(board.EMPTY);
+
+                game.move(square);
+
+                expect(game.board.getSquare(square)).toEqual(player);
             });
         });
 
